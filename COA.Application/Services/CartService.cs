@@ -19,7 +19,7 @@ namespace CustomerOrderService.Application.Services
             _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<Cart>> GetCartAsync(string userId)
+        public async Task<IEnumerable<Cart>> GetCartAsync(Guid userId)
         {
             return await _cartRepository.GetByUserIdAsync(userId);
         }

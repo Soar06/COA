@@ -13,7 +13,7 @@ namespace CustomerOrderService.Domain.Entities
         public int Quantity { get; set; }
         [Column(TypeName = "decimal(10,2)")]
         public decimal UnitPrice { get; set; }
-        public DateTime CreatedAt { get; set; } // Removed dynamic initializer
+        public DateTime CreatedAt { get; set; } 
         public DateTime? UpdatedAt { get; set; }
     }
 }

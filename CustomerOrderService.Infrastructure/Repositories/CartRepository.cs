@@ -1,6 +1,7 @@
 ﻿using CustomerOrderService.Domain.Entities;
 using CustomerOrderService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace CustomerOrderService.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Cart>> GetByUserIdAsync(string userId)
+        public async Task<IEnumerable<Cart>> GetByUserIdAsync(Guid userId)
         {
             return await _context.Carts
                 .Include(c => c.Product)
@@ -23,7 +24,7 @@ namespace CustomerOrderService.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Cart> GetByUserIdAndProductIdAsync(string userId, int productId)
+        public async Task<Cart> GetByUserIdAndProductIdAsync(Guid userId, int productId)
         {
             return await _context.Carts
                 .FirstOrDefaultAsync(c => c.UserId == userId && c.ProductId == productId);
@@ -41,7 +42,7 @@ namespace CustomerOrderService.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteByUserIdAsync(string userId)
+        public async Task DeleteByUserIdAsync(Guid userId)
         {
             var carts = await _context.Carts
                 .Where(c => c.UserId == userId)

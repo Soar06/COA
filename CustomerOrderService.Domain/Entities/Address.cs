@@ -13,7 +13,7 @@ namespace CustomerOrderService.Domain.Entities
         public string Country { get; set; }
         [StringLength(20)]
         public string PostalCode { get; set; }
-        public DateTime CreatedAt { get; set; } // Removed dynamic initializer
+        public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
 }

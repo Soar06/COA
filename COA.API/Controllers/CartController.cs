@@ -1,6 +1,7 @@
 ﻿using CustomerOrderService.Application.DTOs;
 using CustomerOrderService.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace CustomerOrderService.Api.Controllers
@@ -17,10 +18,10 @@ namespace CustomerOrderService.Api.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetCart(string userId)
+        public async Task<IActionResult> GetCart(Guid userId)
         {
-            var cart = await _cartService.GetCartAsync(userId);
-            return Ok(cart);
+            var carts = await _cartService.GetCartAsync(userId);
+            return Ok(carts);
         }
 
         [HttpPost]
