@@ -84,10 +84,8 @@ namespace CustomerOrderService.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("CartId");
 
@@ -141,10 +139,8 @@ namespace CustomerOrderService.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("OrderId");
 
@@ -242,38 +238,42 @@ namespace CustomerOrderService.Infrastructure.Migrations
                         .HasDatabaseName("IX_Product_Name");
 
                     b.ToTable("Products");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            ProductId = 1,
-                            CreatedAt = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "High-performance laptop",
-                            ImageUrl = "laptop.jpg",
-                            IsActive = true,
-                            Name = "Laptop",
-                            Price = 999.99m
-                        },
-                        new
-                        {
-                            ProductId = 2,
-                            CreatedAt = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Latest model smartphone",
-                            ImageUrl = "phone.jpg",
-                            IsActive = true,
-                            Name = "Smartphone",
-                            Price = 499.99m
-                        },
-                        new
-                        {
-                            ProductId = 3,
-                            CreatedAt = new DateTime(2025, 5, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Wireless headphones",
-                            ImageUrl = "headphones.jpg",
-                            IsActive = true,
-                            Name = "Headphones",
-                            Price = 79.99m
-                        });
+            modelBuilder.Entity("CustomerOrderService.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("IX_User_Email");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CustomerOrderService.Domain.Entities.Cart", b =>
@@ -284,7 +284,15 @@ namespace CustomerOrderService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CustomerOrderService.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CustomerOrderService.Domain.Entities.Order", b =>
@@ -295,7 +303,15 @@ namespace CustomerOrderService.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CustomerOrderService.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("ShippingAddress");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CustomerOrderService.Domain.Entities.OrderItem", b =>

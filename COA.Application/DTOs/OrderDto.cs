@@ -1,8 +1,10 @@
-﻿namespace CustomerOrderService.Application.DTOs
+﻿using System;
+
+namespace CustomerOrderService.Application.DTOs
 {
     public class OrderDto
     {
-        public string UserId { get; set; }
+        public Guid UserId { get; set; } // Changed from string to Guid
         public string CustomerName { get; set; }
         public string CustomerEmail { get; set; }
         public string AddressLine { get; set; }

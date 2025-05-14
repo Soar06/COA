@@ -1,4 +1,5 @@
 ﻿using CustomerOrderService.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -6,6 +7,7 @@ namespace CustomerOrderService.Api.Controllers
 {
     [Route("api/admin/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class AdminOrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
